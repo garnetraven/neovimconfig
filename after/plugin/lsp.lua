@@ -6,14 +6,45 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
--- to learn how to use mason.nvim
--- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guide/integrate-with-mason-nvim.md
+-- Mason setup
 require('mason').setup({})
+
+-- Mason LSP setup
 require('mason-lspconfig').setup({
-  ensure_installed = {'tsserver', 'rust_analyzer', 'lua_ls', 'clangd', 'cssls', 'html', 'jdtls', 'pyright'},
+  ensure_installed = {'tsserver', 'lua_ls', 'clangd', 'cssls', 'html', 'jdtls', 'pyright'},
   handlers = {
     function(server_name)
       require('lspconfig')[server_name].setup({})
     end,
   },
 })
+
+-- Create a function to configure jdtls separately
+local function setup_jdtls()
+  local jdtls = require('lspconfig').jdtls
+  jdtls.setup({
+    cmd = {'jdtls'},
+    root_dir = function(fname)
+      return require('lspconfig').util.root_pattern('pom.xml', 'build.gradle', '.git')(fname)
+    end,
+    settings = {
+      java = {
+        eclipse = {
+          downloadSources = true,
+        },
+        configuration = {
+          updateBuildConfiguration = 'interactive',
+        },
+        maven = {
+          downloadSources = true,
+        },
+      },
+    },
+    on_attach = function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
+    end,
+  })
+end
+
+-- Call the function to setup jdtls
+setup_jdtls()
