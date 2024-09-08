@@ -1,6 +1,6 @@
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
@@ -10,7 +10,7 @@ require('mason').setup({})
 
 -- Mason LSP setup
 require('mason-lspconfig').setup({
-  ensure_installed = {'tsserver', 'lua_ls', 'clangd', 'cssls', 'html', 'jdtls', 'pyright'},
+  ensure_installed = {'ts_ls', 'lua_ls', 'clangd', 'cssls', 'html', 'jdtls', 'pyright'},
   handlers = {
     function(server_name)
       require('lspconfig')[server_name].setup({})
@@ -40,7 +40,7 @@ local function setup_lua_ls()
         },
       },
     },
-    on_attach = function(bufnr)
+    on_attach = function(client, bufnr)
       lsp_zero.default_keymaps({buffer = bufnr})
     end,
   })
@@ -67,7 +67,7 @@ local function setup_jdtls()
         },
       },
     },
-    on_attach = function(bufnr)
+    on_attach = function(client, bufnr)
       lsp_zero.default_keymaps({buffer = bufnr})
     end,
   })
