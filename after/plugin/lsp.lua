@@ -10,7 +10,7 @@ require('mason').setup({})
 
 -- Mason LSP setup
 require('mason-lspconfig').setup({
-  ensure_installed = {'ts_ls', 'lua_ls', 'clangd', 'cssls', 'html', 'jdtls', 'pyright'},
+  ensure_installed = {'lua_ls', 'clangd', 'cssls', 'html', 'jdtls', 'pyright'},
   handlers = {
     function(server_name)
       require('lspconfig')[server_name].setup({})
